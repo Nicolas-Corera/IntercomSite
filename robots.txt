@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://intercomsite.com.ar/sitemap.xml
+Sitemap: https://www.intercomsite.com.ar/sitemap.xml
