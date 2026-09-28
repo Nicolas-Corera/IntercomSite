@@ -153,6 +153,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  /* ------------------------------------------------------------
+     Carrusel de marcas: clona la lista para que el loop no tenga cortes
+     ------------------------------------------------------------ */
+  const brandsTrack = document.querySelector(".brands__track");
+  if (brandsTrack) {
+    const brandsList = brandsTrack.querySelector(".brands__list");
+    const clone = brandsList.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    clone.querySelectorAll("img").forEach((img) => (img.alt = ""));
+    brandsTrack.appendChild(clone);
+
+    gsap.from(".brands", {
+      opacity: 0,
+      y: 30,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".brands",
+        start: "top 90%",
+        toggleActions: "play none none reverse",
+      },
+    });
+  }
+
   const bentoItems = gsap.utils.toArray(".bento-item");
   gsap.from(bentoItems, {
     opacity: 0,
@@ -261,17 +285,53 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   });
 
-  gsap.from(".about__card", {
-    opacity: 0,
-    y: 40,
-    duration: 0.8,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".about",
-      start: "top 80%",
-      toggleActions: "play none none reverse",
-    },
-  });
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: ".about",
+        start: "top 80%",
+        toggleActions: "play none none reverse",
+      },
+    })
+    .from(".about__card", {
+      opacity: 0,
+      y: 40,
+      duration: 0.8,
+      ease: "power3.out",
+    })
+    .from(
+      ".about__sticker",
+      {
+        opacity: 0,
+        scale: 0.6,
+        rotation: -20,
+        duration: 0.6,
+        ease: "back.out(1.8)",
+      },
+      "-=0.35",
+    );
+
+  // Hover en toda la tarjeta: la etiqueta se endereza
+  const aboutCard = document.querySelector(".about__card");
+  const aboutSticker = document.querySelector(".about__sticker");
+  if (window.matchMedia("(hover: hover)").matches) {
+    aboutCard.addEventListener("mouseenter", () =>
+      gsap.to(aboutSticker, {
+        rotation: 0,
+        duration: 0.5,
+        ease: "back.out(2)",
+        overwrite: "auto",
+      }),
+    );
+    aboutCard.addEventListener("mouseleave", () =>
+      gsap.to(aboutSticker, {
+        rotation: -6,
+        duration: 0.5,
+        ease: "back.out(2)",
+        overwrite: "auto",
+      }),
+    );
+  }
 
   const faqItems = gsap.utils.toArray(".faq-item");
   gsap.from(faqItems, {

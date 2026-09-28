@@ -1570,6 +1570,126 @@ address {
   color: rgba(239, 238, 236, 0.65);
 }
 
+/* ==========================================================================
+   CARRUSEL DE MARCAS (trabajos anteriores)
+   ========================================================================== */
+.brands {
+  margin: 64px auto 0;
+}
+
+.brands__title {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(239, 238, 236, 0.5);
+  margin-bottom: 20px;
+}
+
+.brands__viewport {
+  overflow: hidden;
+  /* Desvanece los bordes para que los logos entren y salgan suave */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+.brands__track {
+  display: flex;
+  width: max-content;
+  animation: brands-scroll 40s linear infinite;
+}
+
+.brands__viewport:hover .brands__track {
+  animation-play-state: paused;
+}
+
+.brands__list {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 16px 4px 0;
+}
+
+/* Cada cliente es una tarjeta independiente (con logo o con nombre) */
+.brands__item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  min-width: 180px;
+  padding: 0 28px;
+  border-radius: 16px;
+  background: rgba(21, 37, 63, 0.65);
+  border: 1px solid rgba(69, 93, 131, 0.3);
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.brands__item:hover {
+  border-color: rgba(104, 124, 159, 0.6);
+  background: rgba(44, 61, 91, 0.5);
+}
+
+.brands__item img {
+  height: 40px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  opacity: 0.7;
+  filter: grayscale(1);
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease;
+}
+
+.brands__item:hover img {
+  opacity: 1;
+  filter: grayscale(0);
+}
+
+.brands__item--text {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(239, 238, 236, 0.75);
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.brands__item--text:hover {
+  color: var(--color-white);
+}
+
+@keyframes brands-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brands__track {
+    animation: none;
+  }
+  .brands__viewport {
+    overflow-x: auto;
+  }
+}
+
 /* CTA debajo del portfolio */
 .projects__cta {
   margin-top: 40px;
@@ -1663,7 +1783,7 @@ address {
    QUIÉN ESTÁ DETRÁS
    ========================================================================== */
 .about {
-  padding: 32px 16px 64px;
+  padding: 72px 16px 64px;
   max-width: 1024px;
   margin: 0 auto;
 }
@@ -1685,34 +1805,64 @@ address {
 @media (min-width: 768px) {
   .about__card {
     flex-direction: row;
-    align-items: flex-start;
-    padding: 48px;
+    align-items: center;
+    gap: 48px;
+    padding: 100px 48px 48px;
   }
 }
-.about__avatar {
-  flex-shrink: 0;
-  width: 128px;
-  height: 128px;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  font-weight: 800;
-  color: var(--color-white);
-  background: linear-gradient(
-    to bottom right,
-    var(--color-accent),
-    var(--color-slate)
-  );
-  border: 3px solid rgba(104, 124, 159, 0.6);
-  box-shadow: 0 0 40px rgba(69, 93, 131, 0.45);
-  overflow: hidden;
+
+/* Etiqueta inclinada que sobresale de la esquina de la tarjeta */
+.about__card {
+  position: relative;
 }
-.about__avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+
+@media (max-width: 767px) {
+  .about__card {
+    padding-top: 88px;
+  }
+}
+
+.about__sticker {
+  position: absolute;
+  top: -30px;
+  left: -8px;
+  z-index: 2;
+  max-width: calc(100% + 8px);
+  padding: 16px 24px;
+  border-radius: 22px;
+  font-size: clamp(17px, 5.4vw, 24px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-off-white);
+  background: linear-gradient(
+    135deg,
+    var(--color-accent),
+    var(--color-slate) 60%,
+    var(--color-navy)
+  );
+  border: 1px solid rgba(104, 124, 159, 0.45);
+  box-shadow:
+    0 24px 48px -16px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transform: rotate(-6deg);
+}
+
+@media (min-width: 768px) {
+  .about__sticker {
+    top: -30px;
+    left: -8px;
+    max-width: none;
+    padding: 26px 42px;
+    border-radius: 28px;
+    font-size: 32px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .about__sticker {
+    left: -60px;
+  }
 }
 .about__title {
   font-size: 26px;
@@ -1735,6 +1885,51 @@ address {
 .about__text strong {
   color: var(--color-white);
 }
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.about__stat {
+  padding: 16px 12px;
+  border-radius: 16px;
+  text-align: center;
+  background: rgba(44, 61, 91, 0.3);
+  border: 1px solid rgba(69, 93, 131, 0.3);
+}
+
+.about__stat-value {
+  display: block;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(
+    to bottom right,
+    var(--color-white),
+    var(--color-light-blue)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.about__stat-label {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(239, 238, 236, 0.7);
+}
+
+@media (max-width: 480px) {
+  .about__stats {
+    grid-template-columns: 1fr;
+  }
+}
+
 .about__links {
   margin-top: 24px;
   display: flex;

@@ -98,6 +98,7 @@
               "@id": "https://www.intercomsite.com.ar/#founder",
               "name": "Nicolás Corera",
               "jobTitle": "Desarrollador Full Stack",
+              "description": "Diseñador y desarrollador de sitios web desde 2005.",
               "url": "https://nicolascorera.com.ar"
             },
             "contactPoint": {
@@ -588,6 +589,39 @@
               </a>
             </div>
           </article>
+        </div>
+
+        <!-- ============ CARRUSEL DE MARCAS (trabajos anteriores) ============
+             Cada <li> es UNA tarjeta = UN cliente. Dos variantes:
+               · Con logo:        <li class="brands__item"><img src="..." alt="Nombre" /></li>
+               · Solo con nombre: <li class="brands__item brands__item--text">Nombre</li>
+             No dupliques la lista: el JS la clona sola para el loop infinito. -->
+        <div class="brands" role="region" aria-labelledby="brands-title">
+          <p class="brands__title" id="brands-title">
+            Otros negocios que confiaron en nosotros
+          </p>
+          <div class="brands__viewport">
+            <div class="brands__track">
+              <ul class="brands__list">
+                <li class="brands__item">
+                  <img src="/assets/img/brands/placeholder-logo.svg" alt="Cliente con logo 1" width="140" height="40" loading="lazy" decoding="async" />
+                </li>
+                <li class="brands__item brands__item--text">Cliente sin logo 1</li>
+                <li class="brands__item">
+                  <img src="/assets/img/brands/placeholder-logo.svg" alt="Cliente con logo 2" width="140" height="40" loading="lazy" decoding="async" />
+                </li>
+                <li class="brands__item brands__item--text">Cliente sin logo 2</li>
+                <li class="brands__item">
+                  <img src="/assets/img/brands/placeholder-logo.svg" alt="Cliente con logo 3" width="140" height="40" loading="lazy" decoding="async" />
+                </li>
+                <li class="brands__item brands__item--text">Cliente sin logo 3</li>
+                <li class="brands__item">
+                  <img src="/assets/img/brands/placeholder-logo.svg" alt="Cliente con logo 4" width="140" height="40" loading="lazy" decoding="async" />
+                </li>
+                <li class="brands__item brands__item--text">Cliente sin logo 4</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div class="projects__cta">
@@ -1148,23 +1182,43 @@
       <!-- ============ QUIÉN ESTÁ DETRÁS ============ -->
       <section class="about" id="nosotros" aria-labelledby="nosotros-title">
         <div class="about__card">
-          <div class="about__avatar" aria-hidden="true">NC</div>
+          <p class="about__sticker">Por qué elegir IntercomSite</p>
           <div class="about__body">
             <p class="eyebrow eyebrow--left">Quién está detrás</p>
             <h2 class="about__title" id="nosotros-title">
-              Hablás directo con quien programa tu web
+              Más de 20 años haciendo webs que trabajan para tu negocio
             </h2>
             <p class="about__text">
               Soy <strong>Nicolás Corera</strong>, desarrollador Full Stack de
-              Buenos Aires y creador de IntercomSite. Sin intermediarios ni
-              plantillas recicladas: diseño y programo cada proyecto a medida,
-              te explico todo en simple y te entrego el código para que sea
-              tuyo.
+              Buenos Aires, y diseño y programo sitios web
+              <strong>desde 2005</strong>. En todo este tiempo acompañé a
+              comercios, profesionales, emprendedores y empresas de todo el país
+              a crecer en internet: desde su primera página hasta tiendas online
+              y sistemas de gestión completos.
             </p>
             <p class="about__text">
-              Hago desde landings hasta tiendas online y sistemas completos, así
-              que tu web puede crecer conmigo cuando tu negocio lo necesite.
+              En IntercomSite trabajás conmigo de punta a punta: el mismo que
+              entiende tu negocio es el que diseña tu web, la programa y te
+              sigue acompañando después de publicarla. Me escribís por WhatsApp
+              y te respondo yo, sin tickets ni derivaciones. Y cada sitio se
+              diseña desde cero, pensado para tu rubro, tus clientes y lo que
+              querés lograr.
             </p>
+
+            <ul class="about__stats">
+              <li class="about__stat">
+                <strong class="about__stat-value">2005</strong>
+                <span class="about__stat-label">Diseñando webs desde</span>
+              </li>
+              <li class="about__stat">
+                <strong class="about__stat-value">+20</strong>
+                <span class="about__stat-label">Años de experiencia</span>
+              </li>
+              <li class="about__stat">
+                <strong class="about__stat-value">1 a 1</strong>
+                <span class="about__stat-label">Trato directo, sin intermediarios</span>
+              </li>
+            </ul>
             <div class="about__links">
               <a
                 href="https://wa.me/5491123589249"
