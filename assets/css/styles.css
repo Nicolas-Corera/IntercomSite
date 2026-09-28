@@ -26,7 +26,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Sin scroll-behavior: smooth: choca con el snap de ScrollTrigger.
+     El scroll suave de los enlaces lo hace GSAP (ScrollToPlugin). */
   overflow-x: clip;
 }
 
@@ -1708,75 +1709,333 @@ address {
 }
 
 /* ==========================================================================
-   PROCESO
+   PROCESO (scroll horizontal fijado con ScrollTrigger)
    ========================================================================== */
 .process {
-  padding: 96px 16px;
-  max-width: 1280px;
-  margin: 0 auto;
+  position: relative;
 }
-.process__list {
+
+.process__pin {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 104px 0 40px;
+  overflow: hidden;
+}
+
+.process__header {
+  margin-bottom: 40px;
+  padding: 0 16px;
+}
+
+/* Sin JS o con "reducir movimiento": carrusel deslizable a mano */
+.process__viewport {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.process__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+/* Con el efecto activo, el JS mueve la pista */
+.process.is-pinned .process__viewport {
+  overflow: visible;
+}
+
+.process__track {
+  --card-w: min(640px, 84vw);
   list-style: none;
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
   gap: 24px;
+  width: max-content;
+  /* Padding lateral para que la primera y la última tarjeta queden centradas */
+  padding: 12px calc((100% - var(--card-w)) / 2);
 }
-@media (min-width: 700px) {
-  .process__list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (min-width: 1024px) {
-  .process__list {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
+
 .process__step {
   position: relative;
+  flex: 0 0 var(--card-w);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 28px;
-  border-radius: 24px;
-  background: rgba(21, 37, 63, 0.65);
-  border: 1px solid rgba(69, 93, 131, 0.3);
-}
-.process__num {
-  font-size: 40px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.03em;
+  min-height: 320px;
+  padding: 36px;
+  border-radius: 28px;
+  overflow: hidden;
+  scroll-snap-align: center;
   background: linear-gradient(
-    to bottom right,
-    var(--color-white),
-    var(--color-light-blue)
+    145deg,
+    rgba(44, 61, 91, 0.55),
+    rgba(8, 24, 47, 0.92) 70%
   );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  margin-bottom: 16px;
+  border: 1px solid rgba(104, 124, 159, 0.35);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  will-change: transform, opacity;
 }
-.process__title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-white);
-  margin-bottom: 8px;
+
+@media (min-width: 768px) {
+  .process__step {
+    min-height: 360px;
+    padding: 48px;
+  }
 }
-.process__desc {
-  font-size: 14px;
-  line-height: 1.6;
-  color: rgba(239, 238, 236, 0.75);
-  flex-grow: 1;
+
+.process__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  margin-bottom: 32px;
 }
+
+.process__icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: rgba(44, 61, 91, 0.6);
+  border: 1px solid rgba(104, 124, 159, 0.4);
+}
+
+.process__icon .material-symbols-outlined {
+  font-size: 28px;
+  color: var(--color-light-blue);
+}
+
 .process__tag {
-  margin-top: 20px;
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 9999px;
   font-size: 12px;
   font-weight: 600;
   color: var(--color-emerald);
   background: rgba(16, 185, 129, 0.12);
   border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.process__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-light-blue);
+  margin-bottom: 8px;
+}
+
+.process__title {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--color-white);
+  margin-bottom: 14px;
+}
+
+.process__desc {
+  position: relative;
+  z-index: 1;
+  max-width: 440px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(239, 238, 236, 0.8);
+}
+
+@media (min-width: 768px) {
+  .process__desc {
+    font-size: 17px;
+  }
+}
+
+/* Número gigante de fondo, solo contorno */
+.process__num {
+  position: absolute;
+  right: 20px;
+  bottom: -28px;
+  font-size: clamp(130px, 20vw, 220px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-family: var(--font-sans);
+  /* Relleno degradado en vez de contorno: la fuente es variable y con
+     text-stroke se ven las líneas internas de los trazos superpuestos */
+  background: linear-gradient(
+    to bottom,
+    rgba(104, 124, 159, 0.3),
+    rgba(104, 124, 159, 0.04) 85%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Barra de progreso con los 4 pasos */
+.process__progress {
+  position: relative;
+  width: min(640px, calc(100% - 32px));
+  margin: 36px auto 0;
+}
+
+.process:not(.is-pinned) .process__progress {
+  display: none;
+}
+
+.process__bar {
+  position: absolute;
+  top: 7px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(104, 124, 159, 0.25);
+}
+
+.process__bar-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--color-emerald),
+    var(--color-light-blue)
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.process__dots {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.process__dot {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(239, 238, 236, 0.5);
+  transition: color 0.3s ease;
+}
+
+.process__dot::before {
+  content: "";
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--color-midnight);
+  border: 2px solid rgba(104, 124, 159, 0.5);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.process__dot:hover {
+  color: var(--color-off-white);
+}
+
+.process__dot.is-done::before {
+  border-color: var(--color-emerald);
+}
+
+.process__dot.is-active {
+  color: var(--color-white);
+}
+
+.process__dot.is-active::before {
+  background: var(--color-emerald);
+  border-color: var(--color-emerald);
+  box-shadow: 0 0 0 5px rgba(52, 211, 153, 0.18);
+}
+
+@media (min-width: 640px) {
+  .process__dot {
+    font-size: 13px;
+  }
+}
+
+/* Todo tiene que entrar en una pantalla (100vh): compacto en pantallas bajas */
+.process .section-title {
+  font-size: clamp(30px, 4.2vw, 44px);
+}
+
+@media (max-height: 860px) {
+  .process__pin {
+    padding: 92px 0 28px;
+  }
+  .process__header {
+    margin-bottom: 24px;
+  }
+  .process .section-desc {
+    margin-top: 10px;
+    font-size: 15px;
+  }
+  .process__step {
+    min-height: 0;
+  }
+  .process__top {
+    margin-bottom: 20px;
+  }
+  .process__progress {
+    margin-top: 24px;
+  }
+}
+
+@media (max-height: 720px) {
+  .process .section-desc {
+    display: none;
+  }
+  .process .section-title {
+    font-size: clamp(26px, 3.4vw, 34px);
+  }
+  .process__step {
+    padding: 28px 32px;
+  }
+  .process__icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-height: 660px) {
+  .process__pin {
+    padding: 80px 0 16px;
+  }
+  .process__header {
+    margin-bottom: 16px;
+  }
+  .process .section-title {
+    font-size: 24px;
+  }
+  .process__step {
+    padding: 22px 24px;
+  }
+  .process__top {
+    margin-bottom: 14px;
+  }
+  .process__title {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+  .process__desc {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .process__progress {
+    margin-top: 16px;
+  }
 }
 
 /* ==========================================================================

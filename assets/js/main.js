@@ -2,7 +2,39 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ============================================================
      GSAP setup
      ============================================================ */
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  /* ------------------------------------------------------------
+     Scroll suave de los enlaces internos (#seccion) con GSAP.
+     Reemplaza a scroll-behavior: smooth, que se pelea con el snap
+     de ScrollTrigger.
+     ------------------------------------------------------------ */
+  const smoothScrollTo = (y) =>
+    gsap.to(window, {
+      scrollTo: { y, autoKill: true },
+      duration: prefersReducedMotion ? 0 : 1,
+      ease: "power2.inOut",
+      overwrite: "auto",
+    });
+
+  document.querySelectorAll('a[href^="#"]:not(.skip-link)').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const hash = link.getAttribute("href");
+      const target = hash.length > 1 && document.querySelector(hash);
+      if (!target) return;
+      e.preventDefault();
+      // Si la sección está fijada (pin), apuntar al inicio de su tramo
+      const parent = target.parentElement;
+      smoothScrollTo(
+        parent.classList.contains("pin-spacer") ? parent : target,
+      );
+      history.pushState(null, "", hash);
+    });
+  });
 
   /* ------------------------------------------------------------
      1) Animación de entrada del Hero
@@ -271,19 +303,99 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   });
 
+  /* ------------------------------------------------------------
+     Proceso: la sección se fija y el scroll vertical mueve las
+     tarjetas en horizontal hasta el último paso
+     ------------------------------------------------------------ */
+  const processSection = document.querySelector(".process");
+  const processTrack = processSection.querySelector(".process__track");
   const processSteps = gsap.utils.toArray(".process__step");
-  gsap.from(processSteps, {
-    opacity: 0,
-    y: 40,
-    duration: 0.7,
-    ease: "power3.out",
-    stagger: 0.12,
-    scrollTrigger: {
-      trigger: ".process__list",
-      start: "top 80%",
-      toggleActions: "play none none reverse",
-    },
+  const processDots = gsap.utils.toArray(".process__dot");
+  const processFill = processSection.querySelector(".process__bar-fill");
+  const lastStep = processSteps.length - 1;
+
+  gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+    processSection.classList.add("is-pinned");
+
+    // Recorrido: del centro de la primera tarjeta al centro de la última
+    const distance = () =>
+      processSteps[lastStep].offsetLeft - processSteps[0].offsetLeft;
+
+    const setActive = (progress) => {
+      const active = Math.round(progress * lastStep);
+      processDots.forEach((dot, i) => {
+        dot.classList.toggle("is-active", i === active);
+        dot.classList.toggle("is-done", i < active);
+        dot.setAttribute("aria-current", i === active ? "step" : "false");
+      });
+    };
+
+    const slide = gsap.to(processTrack, {
+      x: () => -distance(),
+      ease: "none",
+      scrollTrigger: {
+        trigger: processSection,
+        start: "top top",
+        end: () => `+=${distance()}`,
+        pin: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        snap: {
+          snapTo: 1 / lastStep,
+          // Sin inercia: se acomoda en el paso más cercano a donde frenaste,
+          // así no "se pasa" al siguiente al hacer clic en un punto
+          inertia: false,
+          duration: { min: 0.2, max: 0.5 },
+          delay: 0.15,
+          ease: "power1.inOut",
+        },
+        onUpdate: (self) => {
+          gsap.set(processFill, { scaleX: self.progress });
+          setActive(self.progress);
+        },
+      },
+    });
+
+    // La tarjeta del centro se destaca; las de los costados se achican
+    processSteps.forEach((step) => {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: step,
+            containerAnimation: slide,
+            start: "left right",
+            end: "right left",
+            scrub: true,
+          },
+        })
+        .fromTo(
+          step,
+          { scale: 0.86, opacity: 0.35 },
+          { scale: 1, opacity: 1, ease: "power1.out" },
+        )
+        .to(step, { scale: 0.86, opacity: 0.35, ease: "power1.in" });
+    });
+
+    // Los puntos del progreso llevan a cada paso
+    const onDotClick = (e) => {
+      const st = slide.scrollTrigger;
+      const i = Number(e.currentTarget.dataset.step);
+      smoothScrollTo(st.start + (st.end - st.start) * (i / lastStep));
+    };
+    processDots.forEach((dot) => dot.addEventListener("click", onDotClick));
+
+    return () => {
+      processSection.classList.remove("is-pinned");
+      processDots.forEach((dot) =>
+        dot.removeEventListener("click", onDotClick),
+      );
+    };
   });
+
+  // Los triggers de más abajo tienen que tener en cuenta el espacio del pin
+  ScrollTrigger.sort();
+  window.addEventListener("load", () => ScrollTrigger.refresh());
 
   gsap
     .timeline({

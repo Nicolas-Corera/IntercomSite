@@ -294,6 +294,7 @@
     <!-- Scripts (defer: no bloquean el renderizado) -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
     <script defer src="/assets/js/main.js"></script>
   </head>
   <body>
@@ -1129,54 +1130,95 @@
 
       <!-- ============ PROCESO ============ -->
       <section class="process" id="proceso" aria-labelledby="proceso-title">
-        <header class="section-header">
-          <p class="eyebrow">Cómo trabajamos</p>
-          <h2 class="section-title" id="proceso-title">
-            De la idea a tu web online en 4 pasos
-          </h2>
-          <p class="section-desc">
-            Sabés en qué etapa está tu proyecto en todo momento. Sin sorpresas.
-          </p>
-        </header>
+        <div class="process__pin">
+          <header class="section-header process__header">
+            <p class="eyebrow">Cómo trabajamos</p>
+            <h2 class="section-title" id="proceso-title">
+              De la idea a tu web online en 4 pasos
+            </h2>
+            <p class="section-desc">
+              Sabés en qué etapa está tu proyecto en todo momento. Sin sorpresas.
+            </p>
+          </header>
 
-        <ol class="process__list">
-          <li class="process__step">
-            <span class="process__num" aria-hidden="true">01</span>
-            <h3 class="process__title">Charla inicial</h3>
-            <p class="process__desc">
-              Nos contás tu negocio y tus objetivos. En menos de 24 hs te
-              pasamos un presupuesto cerrado, con precio y plazo por escrito.
-            </p>
-            <span class="process__tag">Gratis</span>
-          </li>
-          <li class="process__step">
-            <span class="process__num" aria-hidden="true">02</span>
-            <h3 class="process__title">Diseño</h3>
-            <p class="process__desc">
-              Te mostramos cómo va a quedar tu web antes de programarla. La
-              ajustamos juntos hasta que te encante.
-            </p>
-            <span class="process__tag">Aprobás vos</span>
-          </li>
-          <li class="process__step">
-            <span class="process__num" aria-hidden="true">03</span>
-            <h3 class="process__title">Desarrollo</h3>
-            <p class="process__desc">
-              Programamos tu sitio rápido, seguro y adaptado a celulares. Te
-              compartimos avances para que lo veas crecer.
-            </p>
-            <span class="process__tag">Avances en vivo</span>
-          </li>
-          <li class="process__step">
-            <span class="process__num" aria-hidden="true">04</span>
-            <h3 class="process__title">Lanzamiento</h3>
-            <p class="process__desc">
-              Publicamos tu web, la conectamos con Google y te enseñamos a
-              usarla. Te entregamos todos los accesos: es 100% tuya.
-            </p>
-            <span class="process__tag">Online</span>
-          </li>
-        </ol>
+          <div class="process__viewport">
+            <ol class="process__track">
+              <li class="process__step">
+                <div class="process__top">
+                  <span class="process__icon" aria-hidden="true">
+                    <span class="material-symbols-outlined">forum</span>
+                  </span>
+                  <span class="process__tag">Gratis</span>
+                </div>
+                <p class="process__label">Paso 1</p>
+                <h3 class="process__title">Charla inicial</h3>
+                <p class="process__desc">
+                  Nos contactás con tu idea. En aproximadamente 24 hs te pasamos
+                  un presupuesto cerrado, con precio y plazo.
+                </p>
+                <span class="process__num" aria-hidden="true">01</span>
+              </li>
+              <li class="process__step">
+                <div class="process__top">
+                  <span class="process__icon" aria-hidden="true">
+                    <span class="material-symbols-outlined">design_services</span>
+                  </span>
+                  <span class="process__tag">Aprobás vos</span>
+                </div>
+                <p class="process__label">Paso 2</p>
+                <h3 class="process__title">Diseño</h3>
+                <p class="process__desc">
+                  Te mostramos cómo va a quedar tu web antes de programarla. En
+                  caso de querer cambios, los vamos ajustando juntos.
+                </p>
+                <span class="process__num" aria-hidden="true">02</span>
+              </li>
+              <li class="process__step">
+                <div class="process__top">
+                  <span class="process__icon" aria-hidden="true">
+                    <span class="material-symbols-outlined">code</span>
+                  </span>
+                  <span class="process__tag">Avances en vivo</span>
+                </div>
+                <p class="process__label">Paso 3</p>
+                <h3 class="process__title">Desarrollo</h3>
+                <p class="process__desc">
+                  Programamos tu sitio rápido, seguro y adaptado a celulares. Te
+                  compartimos avances para que lo veas crecer.
+                </p>
+                <span class="process__num" aria-hidden="true">03</span>
+              </li>
+              <li class="process__step">
+                <div class="process__top">
+                  <span class="process__icon" aria-hidden="true">
+                    <span class="material-symbols-outlined">rocket_launch</span>
+                  </span>
+                  <span class="process__tag">Online</span>
+                </div>
+                <p class="process__label">Paso 4</p>
+                <h3 class="process__title">Lanzamiento</h3>
+                <p class="process__desc">
+                  Publicamos tu web, la conectamos con Google y te enseñamos a
+                  usarla. Te entregamos todos los accesos: es 100% tuya.
+                </p>
+                <span class="process__num" aria-hidden="true">04</span>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Progreso: se llena mientras scrolleás; cada punto lleva a su paso -->
+          <nav class="process__progress" aria-label="Pasos del proceso">
+            <div class="process__bar" aria-hidden="true">
+              <span class="process__bar-fill"></span>
+            </div>
+            <ol class="process__dots">
+              <li><button type="button" class="process__dot is-active" data-step="0">Charla</button></li>
+              <li><button type="button" class="process__dot" data-step="1">Diseño</button></li>
+              <li><button type="button" class="process__dot" data-step="2">Desarrollo</button></li>
+              <li><button type="button" class="process__dot" data-step="3">Lanzamiento</button></li>
+            </ol>
+          </nav>
+        </div>
       </section>
 
       <!-- ============ QUIÉN ESTÁ DETRÁS ============ -->
