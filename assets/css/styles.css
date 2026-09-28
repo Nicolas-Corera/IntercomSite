@@ -1716,13 +1716,18 @@ address {
 }
 
 .process__pin {
-  min-height: 100vh;
-  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 104px 0 40px;
+  padding: 96px 0 64px;
   overflow: hidden;
+}
+
+/* Escritorio: la sección ocupa toda la pantalla mientras está fijada */
+.process.is-pinned .process__pin {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 104px 0 40px;
 }
 
 .process__header {
@@ -1730,8 +1735,9 @@ address {
   padding: 0 16px;
 }
 
-/* Sin JS o con "reducir movimiento": carrusel deslizable a mano */
+/* Celular (y sin JS): carrusel deslizable, manejado con los botones */
 .process__viewport {
+  position: relative;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -1883,8 +1889,22 @@ address {
   margin: 36px auto 0;
 }
 
-.process:not(.is-pinned) .process__progress {
+.process:not(.is-pinned):not(.is-carousel) .process__progress {
   display: none;
+}
+
+/* Carrusel (celular): la tarjeta centrada se destaca */
+.process.is-carousel .process__step {
+  opacity: 0.45;
+  transform: scale(0.92);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.process.is-carousel .process__step.is-current {
+  opacity: 1;
+  transform: none;
 }
 
 .process__bar {
