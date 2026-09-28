@@ -327,21 +327,42 @@
           >
         </a>
 
-        <ul class="navbar__menu">
+        <ul class="navbar__menu" id="nav-menu">
           <li><a href="#proyectos" class="navbar__link">Proyectos</a></li>
           <li><a href="#servicios" class="navbar__link">Servicios</a></li>
           <li><a href="#planes" class="navbar__link">Precios</a></li>
           <li><a href="#proceso" class="navbar__link">Cómo trabajamos</a></li>
           <li><a href="#faq" class="navbar__link">Preguntas</a></li>
+          <li class="navbar__menu-cta">
+            <a
+              href="https://wa.me/5491123589249"
+              class="btn btn--cta btn--with-icon"
+              data-wa-msg="¡Hola! Quiero pedir un presupuesto para mi página web."
+            >
+              <svg class="ic-sm" aria-hidden="true"><use href="#ic-whatsapp" /></svg>
+              Pedir presupuesto
+            </a>
+          </li>
         </ul>
 
         <div class="navbar__cta-wrap">
           <a
             href="https://wa.me/5491123589249"
-            class="btn btn--cta"
+            class="btn btn--cta navbar__cta"
             data-wa-msg="¡Hola! Quiero pedir un presupuesto para mi página web."
             >Pedir presupuesto</a
           >
+          <button
+            type="button"
+            class="navbar__toggle"
+            aria-expanded="false"
+            aria-controls="nav-menu"
+            aria-label="Abrir menú"
+          >
+            <span class="navbar__toggle-bar"></span>
+            <span class="navbar__toggle-bar"></span>
+            <span class="navbar__toggle-bar"></span>
+          </button>
         </div>
       </nav>
     </header>
@@ -358,10 +379,12 @@
             Diseño de páginas web · Buenos Aires
           </p>
 
-          <h1 class="hero__title" id="hero-title">
-            Páginas web que <br class="br-desktop" />
-            <span class="hero__title-gradient">te consiguen clientes</span>
-          </h1>
+          <div class="hero__headline">
+            <h1 class="hero__title hero__phrase" id="hero-title">
+              <span class="hero__line">Páginas web que</span>
+              <span class="hero__line hero__title-gradient">te consiguen clientes</span>
+            </h1>
+          </div>
 
           <p class="hero__subtitle">
             Diseño y desarrollo web a medida para negocios de Buenos Aires y

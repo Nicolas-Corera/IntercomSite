@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   heroTimeline
     .from(".badge", { opacity: 0, y: -20, duration: 0.6 })
-    .from(".hero__title", { opacity: 0, y: 30, duration: 0.8 }, "-=0.3")
+    .from(".hero__headline", { opacity: 0, y: 30, duration: 0.8 }, "-=0.3")
     .from(".hero__subtitle", { opacity: 0, y: 20, duration: 0.7 }, "-=0.5")
     .from(
       ".hero__ctas .btn",
@@ -29,6 +29,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
+
+  /* ------------------------------------------------------------
+     Menú mobile (hamburguesa)
+     ------------------------------------------------------------ */
+  const navToggle = document.querySelector(".navbar__toggle");
+
+  const setMenu = (open) => {
+    siteHeader.classList.toggle("is-menu-open", open);
+    navToggle.setAttribute("aria-expanded", String(open));
+    navToggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+  };
+
+  navToggle.addEventListener("click", () =>
+    setMenu(!siteHeader.classList.contains("is-menu-open")),
+  );
+  document
+    .querySelectorAll(".navbar__menu a")
+    .forEach((link) => link.addEventListener("click", () => setMenu(false)));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setMenu(false);
+  });
+  document.addEventListener("click", (e) => {
+    if (!siteHeader.contains(e.target)) setMenu(false);
+  });
+  window.matchMedia("(min-width: 860px)").addEventListener("change", (e) => {
+    if (e.matches) setMenu(false);
+  });
+
+  /* ------------------------------------------------------------
+     Hero: frases rotativas con fundido cruzado
+     (la nueva entra mientras la anterior se desvanece)
+     ------------------------------------------------------------ */
+  const heroPhrases = [
+    ["Soluciones digitales que", "impulsan tu negocio"],
+    ["Tiendas online que", "venden las 24 horas"],
+    ["Sistemas a medida que", "ordenan tu empresa"],
+  ];
+  const heroHeadline = document.querySelector(".hero__headline");
+  const heroLayers = [heroHeadline.querySelector("h1")];
+
+  // El H1 real queda intacto para SEO; las otras frases se suman como capas
+  heroPhrases.forEach(([first, second]) => {
+    const layer = document.createElement("p");
+    layer.className = "hero__title hero__phrase";
+    layer.setAttribute("aria-hidden", "true");
+    layer.innerHTML = `<span class="hero__line"></span><span class="hero__line hero__title-gradient"></span>`;
+    layer.children[0].textContent = first;
+    layer.children[1].textContent = second;
+    heroHeadline.appendChild(layer);
+    heroLayers.push(layer);
+  });
+
+  let currentLayer = 0;
+
+  const rotatePhrase = () => {
+    const prev = heroLayers[currentLayer];
+    currentLayer = (currentLayer + 1) % heroLayers.length;
+    const next = heroLayers[currentLayer];
+
+    gsap.to(prev, {
+      autoAlpha: 0,
+      y: -16,
+      filter: "blur(10px)",
+      duration: 1,
+      ease: "power2.inOut",
+    });
+    gsap.fromTo(
+      next,
+      { autoAlpha: 0, y: 16, filter: "blur(10px)" },
+      {
+        autoAlpha: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 1,
+        delay: 0.2,
+        ease: "power2.inOut",
+      },
+    );
+  };
+
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    gsap.delayedCall(4, function tick() {
+      rotatePhrase();
+      gsap.delayedCall(4, tick);
+    });
+  }
 
   gsap.from(".site-header .navbar", {
     opacity: 0,
